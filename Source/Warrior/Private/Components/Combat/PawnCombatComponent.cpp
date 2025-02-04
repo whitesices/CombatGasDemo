@@ -2,6 +2,9 @@
 
 
 #include "Components/Combat/PawnCombatComponent.h"
+#include "Items/Weapons/WarriorWeaponBase.h"
+
+#include "WarriorDebugHelper.h"
 
 
 void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegister, AWarriorWeaponBase* InWeaponToRegister, bool bResgisterAsEquippedWeapon)
@@ -18,6 +21,10 @@ void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegis
 	{
 		CurrentEquippedWeaponTag = InWeaponTagToRegister;
 	}
+
+	//打印相应信息
+	const FString WeaponString = FString::Printf(TEXT("A weapon named: %s has been registered using the tag %s "), *InWeaponToRegister->GetName() , *InWeaponTagToRegister.ToString() );
+	Debug::print( WeaponString );
 }
 
 AWarriorWeaponBase* UPawnCombatComponent::GetCharacterCarriedWeaponByTag(FGameplayTag InWeaponTagToGet) const

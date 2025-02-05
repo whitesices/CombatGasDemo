@@ -4,25 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "DataAssets/StartupData/DataAsset_StartUpDataBase.h"
-//引入GameplayTagContainer
-#include "GameplayTagContainer.h"
+//引入公共的结构体类型
+#include "WarriorTypes/WarriorStructTypes.h"
 #include "DataAsset_HeroStartUpData.generated.h"
 
-USTRUCT(BlueprintType)
-struct FWarriorHeroAbilitySet
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "InputTag"))
-	FGameplayTag InputTag;
-
-	//声明自定义的AbilitySystemComponent
-	UPROPERTY(EditDefaultsOnly , BlueprintReadOnly)
-	TSubclassOf<UWarriorGameplayAbility> AbilityToGrant;
-
-	//创建有效性函数
-	bool IsValid() const;
-};
+class UWarriorGameplayAbility;
+class UWarriorAbilitySystemComponent;
 /**
  * 
  */

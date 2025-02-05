@@ -23,6 +23,8 @@
 #include "DataAssets/StartupData/DataAsset_HeroStartUpData.h"
 //引入战斗系统组件
 #include "Components/Combat/HeroCombatComponent.h"
+//引入GameplayTagContainer的头文件
+#include "GameplayTagContainer.h"
 
 #include "InputActionValue.h"
 
@@ -118,6 +120,8 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	UWarriorInputComponent* WInputComponent = CastChecked<UWarriorInputComponent>(PlayerInputComponent);
 	WInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_Move,ETriggerEvent::Triggered,this, &AWarriorHeroCharacter::W_Move);
 	WInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &AWarriorHeroCharacter::W_Look);
+	//设置装备技能的方法
+	WInputComponent->BindAbilityInputAction(InputConfigDataAsset,this , &AWarriorHeroCharacter::Input_AbilityInputPressed , &AWarriorHeroCharacter::Input_AbilityInputRelease);
 
 }
 
@@ -152,4 +156,14 @@ void AWarriorHeroCharacter::W_Look(const FInputActionValue& InputActionValue)
 	{
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AWarriorHeroCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
+{
+	WAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
+}
+
+void AWarriorHeroCharacter::Input_AbilityInputRelease(FGameplayTag InInputTag)
+{
+	WAbilitySystemComponent->OnAbilityInputRelease(InInputTag);
 }

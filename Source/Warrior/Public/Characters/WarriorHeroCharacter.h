@@ -12,6 +12,7 @@ class UCameraComponent;
 class UDataAsset_InputConfig;
 struct FInputActionValue;
 class UHeroCombatComponent;
+struct FGameplayTag;
 
 /**
  * 
@@ -59,6 +60,11 @@ private:
 	void W_Move(const FInputActionValue& InputActionValue);
 
 	void W_Look(const FInputActionValue& InputActionValue);
+
+	//定义装备武器技能按下的方法
+	void Input_AbilityInputPressed(FGameplayTag InInputTag);
+	//定义装备武器技能释放的方法
+	void Input_AbilityInputRelease(FGameplayTag InInputTag);
 #pragma endregion
 
 public:

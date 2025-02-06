@@ -2,6 +2,8 @@
 
 
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
+//引入自定义的GameplayAbility
+#include "AbilitySystem/Abilities/WarriorGameplayAbility.h"
 
 void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InInputTag)
 {
@@ -33,4 +35,49 @@ void UWarriorAbilitySystemComponent::OnAbilityInputRelease(const FGameplayTag& I
 		TryActivateAbility(AbilitySpec.Handle);
 	}
 	
+}
+
+void UWarriorAbilitySystemComponent::GrantHeroWEaponAbilities(const TArray<FWarriorHeroAbilitySet>& InDefaultWeaponAbilities, int32 ApplyLevel , TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles)
+{
+	//判断武器技能是否为空
+	if (InDefaultWeaponAbilities.IsEmpty())
+	{
+		return;
+	}
+
+	//读取每一个英雄属性参数集
+	for (const FWarriorHeroAbilitySet& AbilitySet : InDefaultWeaponAbilities)
+	{
+		//判断读取的AbilitySet是否有效
+		if (!AbilitySet.IsValid()) continue;
+
+		//声明SpecHandle
+		FGameplayAbilitySpec AbilitySpec( AbilitySet.AbilityToGrant);
+		AbilitySpec.SourceObject = GetAvatarActor();
+		AbilitySpec.Level = ApplyLevel;
+		AbilitySpec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);
+
+		//GiveAbility(AbilitySpec);
+		//技能在一个数组内进行管理
+		OutGrantedAbilitySpecHandles.AddUnique(GiveAbility(AbilitySpec));
+	}
+}
+
+void UWarriorAbilitySystemComponent::RemoveHeroWEaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& InSpecHandleToRemove)
+{
+	//判断武器技能是否为空
+	if (InSpecHandleToRemove.IsEmpty())
+	{
+		return;
+	}
+
+	//遍历传过来的句柄
+	for (const FGameplayAbilitySpecHandle& SpecHandle : InSpecHandleToRemove)
+	{
+		if (SpecHandle.IsValid())
+		{
+			ClearAbility(SpecHandle);
+		}
+	}
+	InSpecHandleToRemove.Empty();
 }

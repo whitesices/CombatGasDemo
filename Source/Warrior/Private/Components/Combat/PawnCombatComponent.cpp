@@ -23,8 +23,8 @@ void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegis
 	}
 
 	//打印相应信息
-	const FString WeaponString = FString::Printf(TEXT("A weapon named: %s has been registered using the tag %s "), *InWeaponToRegister->GetName() , *InWeaponTagToRegister.ToString() );
-	Debug::print( WeaponString );
+	/*const FString WeaponString = FString::Printf(TEXT("A weapon named: %s has been registered using the tag %s "), *InWeaponToRegister->GetName() , *InWeaponTagToRegister.ToString() );
+	Debug::print( WeaponString );*/
 }
 
 AWarriorWeaponBase* UPawnCombatComponent::GetCharacterCarriedWeaponByTag(FGameplayTag InWeaponTagToGet) const

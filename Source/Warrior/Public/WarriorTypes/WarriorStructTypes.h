@@ -11,6 +11,8 @@ class UWarriorHeroLinkedAnimLayer;
 class UWarriorGameplayAbility;
 class UWarriorAbilitySystemComponent;
 class UInputMappingContext;
+class UWarriorHeroGameplayAbility;
+//class UWarriorEnemyGameplayAbility;
 
 USTRUCT(BlueprintType)
 struct FWarriorHeroAbilitySet
@@ -22,11 +24,28 @@ struct FWarriorHeroAbilitySet
 
 	//声明自定义的AbilitySystemComponent
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UWarriorGameplayAbility> AbilityToGrant;
+	TSubclassOf<UWarriorHeroGameplayAbility> AbilityToGrant;
 
 	//创建有效性函数
 	bool IsValid() const;
 };
+
+//声明敌人属性集合
+//USTRUCT(BlueprintType)
+//struct FWarriorEnemyAbilitySet
+//{
+//	GENERATED_BODY()
+//
+//	UPROPERTY( EditDefaultsOnly , BlueprintReadOnly , meta = ( Categories = "InputTag") )
+//	FGameplayTag InputTag;
+//
+//	//声明自定义的AbilitySystemComponent
+//	UPROPERTY( EditDefaultsOnly , BlueprintReadOnly )
+//	TSubclassOf<UWarriorEnemyGameplayAbility> AbilityToGrant;
+//
+//	//创建有效性函数
+//	bool IsValid() const;
+//};
 
 USTRUCT(BlueprintType)
 struct FWarriorHeroWeaponData

@@ -8,6 +8,8 @@
 
 class UWarriorGameplayAbility;
 class UWarriorAbilitySystemComponent;
+//引入GamePlayEffect的前置声明
+class UGameplayEffect;
 
 /**
  * 
@@ -27,6 +29,10 @@ protected:
 
 	UPROPERTY( EditDefaultsOnly , Category = "StartUpData")
 	TArray<TSubclassOf<UWarriorGameplayAbility> > ReactiveAbilities;
+
+	//声明存储GameplayEffect的变量
+	UPROPERTY( EditDefaultsOnly , Category = "StartUpData")
+	TArray< TSubclassOf<UGameplayEffect> >  StartUpGameplayEffects;
 
 	void GrantAbilities( const TArray< TSubclassOf<UWarriorGameplayAbility> >& InAbilitiesToGive , UWarriorAbilitySystemComponent* InWarriorASCToGive, int32 ApplyLevel = 1);
 };

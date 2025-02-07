@@ -28,4 +28,10 @@ namespace WarriorGameplayTags
 		////Attack
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Attack_Light_Axe, "Player.Event.Attack.Light.Axe")
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Attack_Heavy_Axe, "Player.Event.Attack.Heavy.Axe")
+
+	UE_DEFINE_GAMEPLAY_TAG(Player_Status_JumpToFinisher, "Player.Status.JumpToFinisher")
+
+	//EnemyTags
+	UE_DEFINE_GAMEPLAY_TAG(Enemy_Weapon,"Enemy.Weapon")
+
 }

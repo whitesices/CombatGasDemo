@@ -38,6 +38,12 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>(TEXT("EnemyCombatComponent"));
 }
 
+UPawnCombatComponent* AWarriorEnemyCharacter::GetPawnCombatComponent() const
+{
+	//返回EnemyCombat
+	return EnemyCombatComponent;
+}
+
 void AWarriorEnemyCharacter::BeginPlay()
 {
 	Debug::print( TEXT("Enemy is working") );
@@ -69,7 +75,7 @@ void AWarriorEnemyCharacter::InitEnemyStartUpData()
 				if (UDataAsset_StartUpDataBase* LoadedData = CharcaterStartUpData.Get())
 				{
 					LoadedData->GiveToAbilitySystemComponent(WAbilitySystemComponent);
-					Debug::print(TEXT("DataEnemiesAsset is loaded!"));
+					/*Debug::print(TEXT("DataEnemiesAsset is loaded!"));*/
 				}
 			}
 		)

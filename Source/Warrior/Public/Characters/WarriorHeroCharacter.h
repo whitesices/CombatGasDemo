@@ -25,6 +25,10 @@ public:
 	//定义一个构造函数
 	AWarriorHeroCharacter();
 
+	//重写GetPawnCombatComponent ~ Begin IPawnCombatInterface 
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
+	//end IPawnCombatInterface
+
 
 protected:
 	//重写PossessedBy ， ~Begin APawn Inetrface

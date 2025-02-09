@@ -6,6 +6,10 @@
 //引入技能蓝图函数库头文件
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayTagContainer.h"
+//引入自定义的PawnCombatInterface（中介者模式)
+#include "Interfaces/PawnCombatInterface.h"
+////引入Combat头文件
+#include "Components/Combat/PawnCombatComponent.h"
 
 UWarriorAbilitySystemComponent* UWFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
 {
@@ -59,3 +63,26 @@ void UWFunctionLibrary::BP_DoesActorHaveTag(AActor* InActor, FGameplayTag TagToC
 	OutConfirmType = NativeDoesActorHaveTag(InActor, TagToCheck) ? EWarriorConfirmType::Yes : EWarriorConfirmType::No;
 
 }
+
+UPawnCombatComponent* UWFunctionLibrary::NativeGetPawnCombatComponentFromActor(AActor* InActor)
+{
+	//检查InActor是否有效
+	check(InActor);
+
+	//检查继承IPawnInterface的actor，触发并调用获取Combat的方法
+	if ( IPawnCombatInterface* PawnCombatInterface = Cast<IPawnCombatInterface>(InActor) )
+	{
+		return PawnCombatInterface->GetPawnCombatComponent();
+	}
+
+	return nullptr;
+}
+
+UPawnCombatComponent* UWFunctionLibrary::BP_GetPawnCombatComponentFromActor(AActor* InActor, EWarriorValidType& OutValidType)
+{
+	UPawnCombatComponent* CombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
+
+	OutValidType = CombatComponent ? EWarriorValidType::Valid : EWarriorValidType::InValid;
+	return CombatComponent;
+}
+

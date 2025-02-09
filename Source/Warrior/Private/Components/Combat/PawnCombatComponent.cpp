@@ -4,6 +4,8 @@
 #include "Components/Combat/PawnCombatComponent.h"
 #include "Items/Weapons/WarriorWeaponBase.h"
 
+#include "Components/BoxComponent.h"
+
 #include "WarriorDebugHelper.h"
 
 
@@ -15,6 +17,10 @@ void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegis
 	check(InWeaponToRegister);
 
 	CharacterCarriedWeaponMap.Emplace( InWeaponTagToRegister , InWeaponToRegister );
+
+	//当完成武器注册后进行武器类中碰撞单播委托的触发绑定(观察者模式)
+	InWeaponToRegister->OnWeaponHitTarget.BindUObject(this, &ThisClass::OnHitTargetActor);
+	InWeaponToRegister->OnWeaponPulledFromTarget.BindUObject(this , &ThisClass::OnWeaponPulledFromTargetActor);
 
 	//如果装备了
 	if (bResgisterAsEquippedWeapon)
@@ -51,4 +57,42 @@ AWarriorWeaponBase* UPawnCombatComponent::GetCharacterCurrentEquippedWeapon() co
 	}
 
 	return GetCharacterCarriedWeaponByTag(CurrentEquippedWeaponTag);
+}
+
+void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+{
+	//检查触发的武器碰撞类型
+	if (ToggleDamageType == EToggleDamageType::CurrentEquippedWeapon )
+	{
+		//创建一个武器类局部变量来存储获得武器类
+		AWarriorWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
+		//检查WeaponToToggle是否有效
+		check( WeaponToToggle );
+
+		//是否启用碰撞
+		if (bShouldEnable)
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+			/*Debug::print( WeaponToToggle->GetName() + TEXT(" collision Enabled ") , FColor::Green );*/
+		}
+		else
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			/*Debug::print(WeaponToToggle->GetName() + TEXT(" collision Disabled "), FColor::Red);*/
+
+			//指控OverlappedActors
+			OverlappedActors.Empty();
+		}
+		
+	}
+
+	//TODO: Handle body collision boxes
+}
+
+void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
+{
+}
+
+void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
+{
 }

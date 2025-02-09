@@ -21,6 +21,10 @@ public:
 	//定义构造函数
 	AWarriorEnemyCharacter();
 
+	//重写GetPawnCombatComponent ~ Begin IPawnCombatInterface 
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
+	//end IPawnCombatInterface
+
 protected:
 	//重写begin Play函数
 	virtual void BeginPlay() override;

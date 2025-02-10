@@ -4,6 +4,8 @@
 //引入GameplayTagContainer
 #include "GameplayTagContainer.h"
 
+#include "ScalableFloat.h"
+
 #include "WarriorStructTypes.generated.h"
 
 //引入相应的前置声明
@@ -13,6 +15,7 @@ class UWarriorAbilitySystemComponent;
 class UInputMappingContext;
 class UWarriorHeroGameplayAbility;
 //class UWarriorEnemyGameplayAbility;
+//struct FScalableFloat;
 
 USTRUCT(BlueprintType)
 struct FWarriorHeroAbilitySet
@@ -63,4 +66,8 @@ struct FWarriorHeroWeaponData
 	//声明InputMappingContext
 	UPROPERTY( EditDefaultsOnly , BlueprintReadOnly)
 	UInputMappingContext* WInputMappingContext;
+
+	//声明武器基础伤害值
+	UPROPERTY( EditDefaultsOnly , BlueprintReadOnly)
+	FScalableFloat WeaponBaseDamage;
 };

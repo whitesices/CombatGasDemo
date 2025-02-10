@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+//引入公用的枚举类型头文件
+#include "WarriorTypes/WarriorEnumTypes.h"
+
 #include "WarriorGameplayAbility.generated.h"
 
 class UPawnCombatComponent;
@@ -40,4 +43,14 @@ protected:
 
 	UFUNCTION( BlueprintPure , Category = "Warrior|Ability")
 	UWarriorAbilitySystemComponent* GetWarriorAbilitySystemComponentFromActorInfo() const;
+
+	//新声明创建一个新的辅助函数在角色和敌人都可以调用
+
+	//先新建一个C++内部调用的激活GE句柄函数
+	FActiveGameplayEffectHandle NativeApplyEffectSpecHandleToTarget( AActor* TargetActor , const FGameplayEffectSpecHandle& InSpecHandle );
+
+	//建立一个暴露给蓝图使用的函数
+	UFUNCTION( BlueprintCallable , Category = "Warrior|Ability"  , meta = ( DisplayName = "Apply Gameplay Effect Spec Handle To Target Actor ", ExpandEnumAsExecs = "OutSuccessType"))
+	FActiveGameplayEffectHandle BP_ApplyEffectSpecHandleToTarget(AActor* TargetActor, const FGameplayEffectSpecHandle& InSpecHandle , EWarriorSuccessType& OutSuccessType );
+
 };

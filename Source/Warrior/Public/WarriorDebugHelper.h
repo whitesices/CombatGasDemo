@@ -15,4 +15,20 @@ namespace Debug
 		}
 
 	}
+
+	//建议一个新的打印函数去打印数值
+	static void print( const FString& FloatTitle , float FloatValueToPrint , int32 InKey = -1 , const FColor& Color = FColor::MakeRandomColor() )
+	{
+		//将信息打印到屏幕上
+		if (GEngine)
+		{
+			const FString FinalMsg = FloatTitle + TEXT(": ") + FString::SanitizeFloat(FloatValueToPrint);
+
+			GEngine->AddOnScreenDebugMessage( InKey , 7.f , Color , FinalMsg);
+
+			//将消息打印到日志上
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *FinalMsg);
+		}
+
+	}
 }

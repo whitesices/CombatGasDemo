@@ -26,6 +26,10 @@ public:
 	UFUNCTION(Blueprintpure , Category = "Warrior|Ability")
 	UHeroCombatComponent* GetHeroCombatComponentFromActorInfo();
 
+	//创建定义存储获取GameplayEffectSpecHandele的方法,传入EffectClass,基础伤害值，当前武器类型 ,当前战斗动作索引
+	UFUNCTION( BlueprintPure , Category = "Warrior|Ability")
+	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle( TSubclassOf<UGameplayEffect> EffectClass , float InWeaponBaseDamage , FGameplayTag InCurrentAttackTypeTag ,int32 InUsedComboCount );
+
 private:
 	TWeakObjectPtr<AWarriorHeroCharacter> CachedWarriorHeroCharcater;
 

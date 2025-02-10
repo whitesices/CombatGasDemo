@@ -4,12 +4,28 @@
 #include "Components/Combat/HeroCombatComponent.h"
 //引入武器类的头文件
 #include "Items/Weapons/WarriorHeroWeapon.h"
+//引入AbilitySystemBlueprintFunction
+#include "AbilitySystemBlueprintLibrary.h"
+//引入GamePlayTag头文件
+#include "WarriorGameplayTags.h"
 
 #include "WarriorDebugHelper.h"
 
 AWarriorHeroWeapon* UHeroCombatComponent::GetHeroCarriedWeaponByTag(FGameplayTag InWeaponTag) const
 {
 	return Cast<AWarriorHeroWeapon>(GetCharacterCarriedWeaponByTag(InWeaponTag));
+}
+
+AWarriorHeroWeapon* UHeroCombatComponent::GetHeroCurrentEquippedWeapon() const
+{
+	//调用父类的获取当前角色武器装备
+	return Cast<AWarriorHeroWeapon>( GetCharacterCurrentEquippedWeapon() );
+}
+
+float UHeroCombatComponent::GetHeroCurrentEquippWeaponDamageAtLevel(float InLevel) const
+{
+	//获取当前武器的基础伤害值,并返回值和等级
+	return GetHeroCurrentEquippedWeapon()->HeroWeaponData.WeaponBaseDamage.GetValueAtLevel(InLevel);
 }
 
 void UHeroCombatComponent::OnHitTargetActor(AActor* HitActor)
@@ -24,6 +40,20 @@ void UHeroCombatComponent::OnHitTargetActor(AActor* HitActor)
 
 	//将HitActor 加入OverlappedActors
 	OverlappedActors.AddUnique(HitActor);
+
+	//声明局部变量gameplayEventData
+	FGameplayEventData Data;
+	//设置Insigator
+	Data.Instigator = GetOwningPawn();
+	//设置目标
+	Data.Target = HitActor;
+
+	//调用SendGamePlayEvent函数
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+	GetOwningPawn(),
+	WarriorGameplayTags::Shared_Event_MeleeHit,
+	Data
+	);
 }
 
 void UHeroCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)

@@ -46,7 +46,8 @@ UPawnCombatComponent* AWarriorEnemyCharacter::GetPawnCombatComponent() const
 
 void AWarriorEnemyCharacter::BeginPlay()
 {
-	Debug::print( TEXT("Enemy is working") );
+	Super::BeginPlay();
+	/*Debug::print( TEXT("Enemy is working") );*/
 }
 
 void AWarriorEnemyCharacter::PossessedBy(AController* NewController)

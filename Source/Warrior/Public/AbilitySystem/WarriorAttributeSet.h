@@ -29,6 +29,9 @@ public:
 	//设置构造函数
 	UWarriorAttributeSet();
 
+	//重写修改基础属性值的方法
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+
 	//声明健康属性
 	UPROPERTY( BlueprintReadOnly , Category = "Health" )
 	FGameplayAttributeData CurrentHealth;

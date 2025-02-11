@@ -78,7 +78,7 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 	//创建一个sourceAttackPower局部float变量
 	float SourceAttackPower = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude( GetWarriorDamageCapture().AttackPowerDef , EvaluateParameters , SourceAttackPower );
-	Debug::print(TEXT("SourceAttackPower is "), SourceAttackPower);
+	/*Debug::print(TEXT("SourceAttackPower is "), SourceAttackPower);*/
 
 	//声明一个基础伤害的局部变量
 	float BaseDamage = 0.f;
@@ -101,20 +101,20 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 		{
 			//存储从GameAbility传递过来的BaseDamage数据
 			BaseDamage = TagMagnitude.Value;
-			Debug::print(TEXT("BaseDamage is "), BaseDamage);
+			/*Debug::print(TEXT("BaseDamage is "), BaseDamage);*/
 		}
 
 		//判断获取的LightAttack Key值是否有效
 		if ( TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Player_SetByCaller_AttackType_Light ) )
 		{
 			UsedLightAttackComboCount = TagMagnitude.Value;
-			Debug::print(TEXT("UsedLightAttackComboCount is "), UsedLightAttackComboCount);
+			/*Debug::print(TEXT("UsedLightAttackComboCount is "), UsedLightAttackComboCount);*/
 		}
 
 		if (TagMagnitude.Key.MatchesTagExact(WarriorGameplayTags::Player_SetByCaller_AttackType_Heavy ) )
 		{
 			UsedHeavyAttackComboCount = TagMagnitude.Value;
-			Debug::print(TEXT("UsedHeavyAttackComboCount is "), UsedHeavyAttackComboCount);
+			/*Debug::print(TEXT("UsedHeavyAttackComboCount is "), UsedHeavyAttackComboCount);*/
 		}
 	}
 

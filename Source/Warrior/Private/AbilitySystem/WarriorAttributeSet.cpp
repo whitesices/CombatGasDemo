@@ -6,6 +6,9 @@
 //引入FGameplayEffectModCallbackData的头文件
 #include "GameplayEffectExtension.h"
 
+#include "WFunctionLibrary.h"
+#include "WarriorGameplayTags.h"
+
 //引入打印信息到屏幕的头文件
 #include "WarriorDebugHelper.h"
 
@@ -66,7 +69,8 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 		//TODO::Handle character death
 		if ( NewCurrentHealth == 0.f )
 		{
-
+			//调用自定义蓝图函数库中的给目标actor添加gameplaytag
+			UWFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), WarriorGameplayTags::Shared_Status_Dead );
 		}
 	}
 }

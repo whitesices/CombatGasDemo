@@ -8,6 +8,8 @@
 
 //引入敌人Combat
 class UEnemyCombatComponent;
+//引入敌人UI
+class UEnemyUIComponent;
 
 /**
  * 
@@ -25,6 +27,10 @@ public:
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 	//end IPawnCombatInterface
 
+	//重写GetPawnUIComponent ~Begin IPawnUIInterface
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	//end IPawnUIInterface
+
 protected:
 	//重写begin Play函数
 	virtual void BeginPlay() override;
@@ -40,6 +46,10 @@ private:
 	//声明敌人战斗组件
 	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "Combat" , meta = (AllowPrivateAccess="true") )
 	UEnemyCombatComponent* EnemyCombatComponent;
+
+	//声明敌人UI组件
+	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "UI" , meta = ( AllowPrivateAccess="true") )
+	UEnemyUIComponent* EnemyUIComonent;
 #pragma endregion
 
 public:
@@ -47,6 +57,12 @@ public:
 	FORCEINLINE UEnemyCombatComponent* GetEnemyCombatComponent() const
 	{
 		return EnemyCombatComponent;
+	}
+
+	//内联函数获取UIComponent
+	FORCEINLINE UEnemyUIComponent* GetEnemyUIComponent() const
+	{
+		return EnemyUIComonent;
 	}
 	
 private:

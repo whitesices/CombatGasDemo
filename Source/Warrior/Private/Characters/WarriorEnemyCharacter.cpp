@@ -9,6 +9,8 @@
 //引入资产管理头文件
 #include "Engine/AssetManager.h"
 #include "DataAssets/StartupData/DataAsset_EnemyStartUpDataBase.h"
+//引入UIComponent
+#include "Components/UI/EnemyUIComponent.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -36,12 +38,20 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 
 	//创建战斗组件
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>(TEXT("EnemyCombatComponent"));
+
+	//创建敌人UI组件
+	EnemyUIComonent = CreateDefaultSubobject<UEnemyUIComponent>( TEXT("EnemyUIComponent"));
 }
 
 UPawnCombatComponent* AWarriorEnemyCharacter::GetPawnCombatComponent() const
 {
 	//返回EnemyCombat
 	return EnemyCombatComponent;
+}
+
+UPawnUIComponent* AWarriorEnemyCharacter::GetPawnUIComponent() const
+{
+	return EnemyUIComonent;
 }
 
 void AWarriorEnemyCharacter::BeginPlay()

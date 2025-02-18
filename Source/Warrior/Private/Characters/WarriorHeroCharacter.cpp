@@ -26,6 +26,9 @@
 //引入GameplayTagContainer的头文件
 #include "GameplayTagContainer.h"
 
+//引入UIComponent组件
+#include "Components/UI/HeroUIComponent.h"
+
 #include "InputActionValue.h"
 
 AWarriorHeroCharacter::AWarriorHeroCharacter()
@@ -67,12 +70,25 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 
 	//创建初始化战斗系统组件
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombat"));
+
+	//创建UIComponent的组件
+	HeroUIComponent = CreateDefaultSubobject<UHeroUIComponent>( TEXT("HeroUI"));
 }
 
 UPawnCombatComponent* AWarriorHeroCharacter::GetPawnCombatComponent() const
 {
 	//返回HeroCombat
 	return HeroCombatComponent;
+}
+
+UPawnUIComponent* AWarriorHeroCharacter::GetPawnUIComponent() const
+{
+	return HeroUIComponent;
+}
+
+UHeroUIComponent* AWarriorHeroCharacter::GetCurrentHeroUIComponent() const
+{
+	return HeroUIComponent;
 }
 
 void AWarriorHeroCharacter::PossessedBy(AController* NewController)

@@ -11,6 +11,9 @@
 
 //class UWarriorAbilitySystemComponent;
 
+//引入UI接口
+class IPawnUIInterface;
+
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 		GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
 		GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
@@ -62,4 +65,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Damage")
 	FGameplayAttributeData DamageTaken;
 	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, DamageTaken)
+
+private:
+	//定义接口变量(通过弱指针)
+	TWeakInterfacePtr<IPawnUIInterface> CachedPawnInterface;
+
 };

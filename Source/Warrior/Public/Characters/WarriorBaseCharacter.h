@@ -8,6 +8,8 @@
 #include "AbilitySystemInterface.h   "
 //引入自定义的PawnCombatInterface（中介者模式)
 #include "Interfaces/PawnCombatInterface.h"
+//引入自定义的PawnUIInterface
+#include "Interfaces/PawnUIInterface.h"
 
 #include "WarriorBaseCharacter.generated.h"
 
@@ -17,7 +19,7 @@ class UAbilitySystemComponent;
 class UDataAsset_StartUpDataBase;
 
 UCLASS()
-class WARRIOR_API AWarriorBaseCharacter : public ACharacter , public IAbilitySystemInterface , public IPawnCombatInterface
+class WARRIOR_API AWarriorBaseCharacter : public ACharacter , public IAbilitySystemInterface , public IPawnCombatInterface , public IPawnUIInterface
 {
 	GENERATED_BODY()
 
@@ -32,6 +34,10 @@ public:
 	//重写GetPawnCombatComponent ~ Begin IPawnCombatInterface 
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 	//end IPawnCombatInterface
+
+	//重写GetPawnUIComponent ~Begin IPawnUIInterface
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	//end IPawnUIInterface
 
 protected:
 	//重写PossessedBy ， ~Begin APawn Inetrface

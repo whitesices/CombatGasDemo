@@ -13,6 +13,7 @@ class UDataAsset_InputConfig;
 struct FInputActionValue;
 class UHeroCombatComponent;
 struct FGameplayTag;
+class UHeroUIComponent;
 
 /**
  * 
@@ -29,6 +30,13 @@ public:
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 	//end IPawnCombatInterface
 
+	//重写GetPawnUIComponent ~Begin IPawnUIInterface
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	//end IPawnUIInterface
+
+	//重写GetHeroUIComponent ~Begin IPawnUIInterface
+	virtual UHeroUIComponent* GetCurrentHeroUIComponent() const override;
+	//end IPawnUIInterface
 
 protected:
 	//重写PossessedBy ， ~Begin APawn Inetrface
@@ -55,6 +63,11 @@ private:
 	//声明战斗系统组件变量
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	UHeroCombatComponent* HeroCombatComponent;
+
+	//声明UIComponent
+	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "UI" , meta = (AllowPrivateAccess = "true"))
+	UHeroUIComponent* HeroUIComponent;
+
 #pragma endregion
 
 #pragma region Input
@@ -76,5 +89,11 @@ public:
 	FORCEINLINE UHeroCombatComponent* GetHeroCombatComponent() const
 	{
 		return HeroCombatComponent;
+	}
+
+	//内联函数获取UIComponent
+	FORCEINLINE UHeroUIComponent* GetHeroUIComponent() const
+	{
+		return HeroUIComponent;
 	}
 };

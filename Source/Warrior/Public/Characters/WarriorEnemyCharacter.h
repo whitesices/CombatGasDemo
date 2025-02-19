@@ -31,6 +31,9 @@ public:
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 	//end IPawnUIInterface
 
+	//重写GetPawnUIComponent ~Begin IPawnUIInterface
+	virtual UEnemyUIComponent* GetCurrentEnemyUIComponent() const override;
+	//end IPawnUIInterface
 protected:
 	//重写begin Play函数
 	virtual void BeginPlay() override;
@@ -39,6 +42,8 @@ protected:
 	//~Begin APawn Interface
 	virtual void PossessedBy(AController* NewController) override;
 	//~End APawn Inetrface
+
+	
 
 private:
 #pragma region Componenets

@@ -9,7 +9,7 @@
 //引入PawnUI的前置声明
 class UPawnUIComponent;
 class UHeroUIComponent;
-
+class UEnemyUIComponent;
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UPawnUIInterface : public UInterface
@@ -31,5 +31,9 @@ public:
 	virtual UPawnUIComponent* GetPawnUIComponent() const = 0;
 
 	//声明获取heroUI的接口函数
-	virtual UHeroUIComponent* GetCurrentHeroUIComponent() const;
+	virtual UHeroUIComponent* GetCurrentHeroUIComponent() const ;
+
+	//声明创建获取EnemyUI的接口函数
+	virtual UEnemyUIComponent* GetCurrentEnemyUIComponent() const;
+
 };

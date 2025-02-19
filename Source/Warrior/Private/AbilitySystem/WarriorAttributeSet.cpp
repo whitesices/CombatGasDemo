@@ -110,9 +110,9 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 		SetCurrentHealth(NewCurrentHealth);
 
 		//声明一个调试信息字符串局部变量
-		const FString DebugString = FString::Printf( TEXT("Old Health is %f , Damage Done is %f , NewCurrentHealth is %f"), OldHealth , DamageDone , NewCurrentHealth );
+		//const FString DebugString = FString::Printf( TEXT("Old Health is %f , Damage Done is %f , NewCurrentHealth is %f"), OldHealth , DamageDone , NewCurrentHealth );
 		//调用屏幕打印函数
-		Debug::print(DebugString, FColor::Green);
+		//Debug::print(DebugString, FColor::Green);
 
 		/************************************ Notify the UI *******************************************/
 		//TODO::Notify the UI

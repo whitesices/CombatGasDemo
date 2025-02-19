@@ -54,6 +54,11 @@ UPawnUIComponent* AWarriorEnemyCharacter::GetPawnUIComponent() const
 	return EnemyUIComonent;
 }
 
+UEnemyUIComponent* AWarriorEnemyCharacter::GetCurrentEnemyUIComponent() const
+{
+	return EnemyUIComonent;
+}
+
 void AWarriorEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();

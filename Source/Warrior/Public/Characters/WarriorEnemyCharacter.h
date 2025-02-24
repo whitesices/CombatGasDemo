@@ -10,6 +10,8 @@
 class UEnemyCombatComponent;
 //引入敌人UI
 class UEnemyUIComponent;
+//引入widgetComponent组件
+class UWidgetComponent;
 
 /**
  * 
@@ -55,6 +57,10 @@ private:
 	//声明敌人UI组件
 	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "UI" , meta = ( AllowPrivateAccess="true") )
 	UEnemyUIComponent* EnemyUIComonent;
+
+	//声明敌人Widget组件
+	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "UI" , meta = (AllowPrivateAccess="true") )
+	UWidgetComponent* EnemyHealthUIComponent;
 #pragma endregion
 
 public:

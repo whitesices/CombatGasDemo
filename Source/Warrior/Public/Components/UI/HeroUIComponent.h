@@ -6,6 +6,9 @@
 #include "Components/UI/PawnUIComponent.h"
 #include "HeroUIComponent.generated.h"
 
+//声明一个多播委托来传递图片信息
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnEquippedWeaponChangedDelegate , TSoftObjectPtr<UTexture2D> , SoftWeapon );
+
 /**
  * 
  */
@@ -18,5 +21,9 @@ public:
 	//声明愤怒百分比变化值
 	UPROPERTY( BlueprintAssignable )
 	FOnPercentChangedDelegate OnCurrentRageChanged;
+
+	//声明武器Icon的委托
+	UPROPERTY( BlueprintCallable,BlueprintAssignable )
+	FOnEquippedWeaponChangedDelegate OnEquippedWeaponChanged;
 	
 };

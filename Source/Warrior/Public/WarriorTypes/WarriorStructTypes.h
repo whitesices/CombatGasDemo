@@ -70,4 +70,9 @@ struct FWarriorHeroWeaponData
 	//声明武器基础伤害值
 	UPROPERTY( EditDefaultsOnly , BlueprintReadOnly)
 	FScalableFloat WeaponBaseDamage;
+
+	//声明武器Icon属性变量
+	UPROPERTY( EditDefaultsOnly,BlueprintReadOnly )
+	TSoftObjectPtr<UTexture2D> SoftWeaponIconTexture;
+	
 };

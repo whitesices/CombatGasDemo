@@ -11,6 +11,10 @@
 #include "DataAssets/StartupData/DataAsset_EnemyStartUpDataBase.h"
 //引入UIComponent
 #include "Components/UI/EnemyUIComponent.h"
+//引入WidgetComponent组件
+#include "Components/WidgetComponent.h"
+//引入自定义的WidgetBase头文件
+#include "Widgets/WarriorWidgetBase.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -41,6 +45,10 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 
 	//创建敌人UI组件
 	EnemyUIComonent = CreateDefaultSubobject<UEnemyUIComponent>( TEXT("EnemyUIComponent"));
+	//创建敌人健康UI组件
+	EnemyHealthUIComponent = CreateDefaultSubobject<UWidgetComponent>( TEXT("EnemyHealthWidgetComponent") );
+	//将健康组件添加的Mesh上
+	EnemyHealthUIComponent->SetupAttachment( GetMesh() );
 }
 
 UPawnCombatComponent* AWarriorEnemyCharacter::GetPawnCombatComponent() const
@@ -63,6 +71,13 @@ void AWarriorEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	/*Debug::print( TEXT("Enemy is working") );*/
+
+	//初始化HealthWidget组件,并判断其有效性
+	if (UWarriorWidgetBase* EnemyHelathWidget = Cast<UWarriorWidgetBase>(EnemyHealthUIComponent->GetUserWidgetObject()))
+	{
+		//将Enemy本身传递进去
+		EnemyHelathWidget->InitEnemyCreateWidget(this);
+	}
 }
 
 void AWarriorEnemyCharacter::PossessedBy(AController* NewController)

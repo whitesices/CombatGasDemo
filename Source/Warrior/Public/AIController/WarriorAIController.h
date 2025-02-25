@@ -27,6 +27,9 @@ public:
 	//end IGenericTeamAgentInterface
 
 protected:
+	//重写Beginplay函数
+	virtual void BeginPlay() override;
+
 	//声明EnemyAI感知组件变量
 	UPROPERTY( VisibleAnywhere,BlueprintReadOnly )
 	UAIPerceptionComponent* EnemyPerceptionComonent;
@@ -38,4 +41,16 @@ protected:
 	//新建一个函数来更新感知数据
 	UFUNCTION()
 	virtual void OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
+
+private:
+	//声明避让策略信息值
+	UPROPERTY( EditDefaultsOnly , Category = "Detour Crowd Avoidance Config")
+	bool bEnableDetourCrowdAvoidance = true;
+
+	//声明避让策略
+	UPROPERTY( EditDefaultsOnly , Category = "Detour Crowd Avoidance Config" , meta = ( EditCondition = "bEnableDetourCrowdAvoidance",UIMin = "1",UIMax="4") )
+	int32 DetourCrowdAvoiddanceQuality = 4;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Detour Crowd Avoidance Config", meta = (EditCondition = "bEnableDetourCrowdAvoidance"))
+	float CollisionQueryRange = 600.f;
 };

@@ -8,6 +8,8 @@
 #include "Perception/AIPerceptionComponent.h"
 //引入AI视觉感知配置头文件
 #include "Perception/AISenseConfig_Sight.h"
+//引入行为树组件头文件
+#include "BehaviorTree/BlackboardComponent.h"
 
 //引入打印日志头文件
 #include "WarriorDebugHelper.h"
@@ -15,10 +17,10 @@
 AWarriorAIController::AWarriorAIController(const FObjectInitializer& ObjectInitializer):Super( ObjectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>("PathFollowingComponent"))
 {
 	//判断CrowdComp的有效性
-	if (UCrowdFollowingComponent* CrowdComp = Cast<UCrowdFollowingComponent>(GetPathFollowingComponent()))
+	/*if (UCrowdFollowingComponent* CrowdComp = Cast<UCrowdFollowingComponent>(GetPathFollowingComponent()))
 	{
 		Debug::print(  TEXT("CrowdFollowingComponent valid"),FColor::Green );
-	}
+	}*/
 
 	//创建视觉感知组件
 	AISenseConfig_Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("EnemySenseConfig_Sight");
@@ -63,11 +65,45 @@ ETeamAttitude::Type AWarriorAIController::GetTeamAttitudeTowards(const AActor& O
 	return ETeamAttitude::Friendly;
 }
 
+void AWarriorAIController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//判断CrowdComp的有效性
+	if (UCrowdFollowingComponent* CrowdComp = Cast<UCrowdFollowingComponent>(GetPathFollowingComponent()))
+	{
+		Debug::print(TEXT("CrowdFollowingComponent valid"), FColor::Green);
+		CrowdComp->SetCrowdSimulationState( bEnableDetourCrowdAvoidance ? ECrowdSimulationState::Enabled : ECrowdSimulationState::Disabled );
+
+		//选择路由质量
+		switch ( DetourCrowdAvoiddanceQuality )
+		{
+			case 1: CrowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Low);break;
+			case 2: CrowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Medium);break;
+			case 3: CrowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::Good);break;
+			case 4: CrowdComp->SetCrowdAvoidanceQuality(ECrowdAvoidanceQuality::High);break;
+			default:
+				break;
+		}
+
+		//设置CrowdComp 的相应参数
+		CrowdComp->SetAvoidanceGroup(1);
+		CrowdComp->SetGroupsToAvoid(1);
+		CrowdComp->SetCrowdCollisionQueryRange( CollisionQueryRange );
+	}
+}
+
 void AWarriorAIController::OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
 	//更新感知信息
 	if (Stimulus.WasSuccessfullySensed() && Actor)
 	{
-		Debug::print( Actor->GetActorNameOrLabel() + TEXT(" was sensd"),FColor::Green );
+		//Debug::print( Actor->GetActorNameOrLabel() + TEXT(" was sensd"),FColor::Green );
+		//判断黑板组件的有效性来存储TargetActor
+		if (UBlackboardComponent* BlackboradComponent = GetBlackboardComponent())
+		{
+			//传递相应的数据,添加所要传递数据的键值名
+			BlackboradComponent->SetValueAsObject(FName("TargetActor"), Actor);
+		}
 	}
 }

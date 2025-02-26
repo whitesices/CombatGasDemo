@@ -40,6 +40,7 @@ void UBTService_OrientToTargetActor::InitializeFromAsset(UBehaviorTree& Asset)
 
 FString UBTService_OrientToTargetActor::GetStaticDescription() const
 {
+	Super::GetStaticDescription();
 	const FString KeyDescription = InTargetActorKey.SelectedKeyName.ToString();
 
 	return FString::Printf( TEXT("Orient rotation to %s key %s"),*KeyDescription , *GetStaticServiceDescription() );

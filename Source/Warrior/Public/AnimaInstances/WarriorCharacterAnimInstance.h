@@ -35,6 +35,10 @@ protected:
 	float GroundSpeed;
 	
 	//获取加速度
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly,Category="AnimData|Locomation")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly,Category="AnimData|Locomotion")
 	bool bHasAcceleration;
+	
+	//运动方向
+	UPROPERTY(VisibleDefaultsOnly , BlueprintReadOnly , Category = "AnimData|Locomotion")
+	float LocomotionDirection;
 };

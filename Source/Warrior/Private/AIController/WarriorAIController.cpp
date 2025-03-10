@@ -57,7 +57,8 @@ ETeamAttitude::Type AWarriorAIController::GetTeamAttitudeTowards(const AActor& O
 	const IGenericTeamAgentInterface* OtherTeamAgent = Cast<const IGenericTeamAgentInterface>( PawnToCheck->GetController() );
 
 	//判断获取Id的有效性
-	if (OtherTeamAgent && OtherTeamAgent->GetGenericTeamId() != GetGenericTeamId())
+	//if (OtherTeamAgent && OtherTeamAgent->GetGenericTeamId() != GetGenericTeamId())
+	if (OtherTeamAgent && OtherTeamAgent->GetGenericTeamId() < GetGenericTeamId())
 	{
 		return ETeamAttitude::Hostile;
 	}
@@ -95,15 +96,32 @@ void AWarriorAIController::BeginPlay()
 
 void AWarriorAIController::OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	//更新感知信息
-	if (Stimulus.WasSuccessfullySensed() && Actor)
+	//检查目标对象是否有效
+	if (UBlackboardComponent* BlackboardComponent = GetBlackboardComponent())
 	{
-		//Debug::print( Actor->GetActorNameOrLabel() + TEXT(" was sensd"),FColor::Green );
-		//判断黑板组件的有效性来存储TargetActor
-		if (UBlackboardComponent* BlackboradComponent = GetBlackboardComponent())
+		//检查获取的TargetActor是否有效
+		if (!BlackboardComponent->GetValueAsObject(FName("TargetActor")) )
 		{
-			//传递相应的数据,添加所要传递数据的键值名
-			BlackboradComponent->SetValueAsObject(FName("TargetActor"), Actor);
+			//更新感知信息
+			if (Stimulus.WasSuccessfullySensed() && Actor)
+			{
+				//传递相应的数据,添加所要传递数据的键值名
+				BlackboardComponent->SetValueAsObject(FName("TargetActor"), Actor);
+			}
 		}
 	}
+
+
+
+	////更新感知信息
+	//if (Stimulus.WasSuccessfullySensed() && Actor)
+	//{
+	//	//Debug::print( Actor->GetActorNameOrLabel() + TEXT(" was sensd"),FColor::Green );
+	//	//判断黑板组件的有效性来存储TargetActor
+	//	if (UBlackboardComponent* BlackboradComponent = GetBlackboardComponent())
+	//	{
+	//		//传递相应的数据,添加所要传递数据的键值名
+	//		BlackboradComponent->SetValueAsObject(FName("TargetActor"), Actor);
+	//	}
+	//}
 }

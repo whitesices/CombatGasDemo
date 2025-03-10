@@ -46,6 +46,9 @@ namespace WarriorGameplayTags
 		WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Ability_Melee)
 		WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Ability_Ranged)
 
+		//StrafingTag
+		WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_Strafing)
+
 		//SharedRags
 		WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN( Shared_Event_MeleeHit )
 		WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN( Shared_Event_HitReact )

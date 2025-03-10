@@ -5,6 +5,8 @@
 //引入角色类基类的头文件
 #include "Characters/WarriorBaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+//引入动画库函数头文件
+#include "KismetAnimationLibrary.h"
 
 void UWarriorCharacterAnimInstance::NativeInitializeAnimation()
 {
@@ -29,4 +31,7 @@ void UWarriorCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaS
 	GroundSpeed=OwningCharacter->GetVelocity().Size2D();
 	//获取加速度是否大于零
 	bHasAcceleration = OwningCharacterMovement->GetCurrentAcceleration().SizeSquared2D() > 0.f;
+
+	//计算方向
+	UKismetAnimationLibrary::CalculateDirection(OwningCharacter->GetVelocity() ,OwningCharacter->GetActorRotation() );
 }

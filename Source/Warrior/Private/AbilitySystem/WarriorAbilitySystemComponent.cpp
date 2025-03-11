@@ -4,6 +4,8 @@
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
 //引入自定义的GameplayAbility
 #include "AbilitySystem/Abilities/WarriorGameplayAbility.h"
+//引入HeroAbilitySystem
+#include "AbilitySystem/Abilities/WarriorHeroGameplayAbility.h"
 
 void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InInputTag)
 {
@@ -80,4 +82,41 @@ void UWarriorAbilitySystemComponent::RemoveHeroWEaponAbilities(UPARAM(ref) TArra
 		}
 	}
 	InSpecHandleToRemove.Empty();
+}
+
+bool UWarriorAbilitySystemComponent::TryActivateAbilityByTag(FGameplayTag AbilityTagByActivate)
+{
+	/*return false;*/
+	//检查Tag是否有效
+	if ( !AbilityTagByActivate.IsValid() )
+	{
+		return false;
+	}
+
+	//声明一个GameplayTag数组来存储
+	TArray<FGameplayAbilitySpec*> FoundAbilitySpecs;
+
+	//通过激活的技能匹配相应的Tag
+	GetActivatableGameplayAbilitySpecsByAllMatchingTags( AbilityTagByActivate.GetSingleTagContainer() , FoundAbilitySpecs );
+
+	//检查这种技能是否有效
+	if ( !FoundAbilitySpecs.IsEmpty() )
+	{
+		const int32 RandomAbilityIndex = FMath::RandRange( 0 , FoundAbilitySpecs.Num() - 1 );
+
+		FGameplayAbilitySpec* SpecToActivate = FoundAbilitySpecs[RandomAbilityIndex];
+
+		//检查SpecToActivate有效性
+		check( SpecToActivate );
+
+		//检查是否被激活
+		if ( !SpecToActivate->IsActive() )
+		{
+			//返回是否激活技能
+			return TryActivateAbility( SpecToActivate->Handle );
+		}
+
+	}
+
+	return false;
 }

@@ -51,4 +51,8 @@ public:
 	UFUNCTION( BlueprintCallable , Category = "Warrior|FunctionLibrary" , meta = (DisplayName = "GetPawnCombat" , ExpandEnumAsExecs = "OutValidType") )
 	static UPawnCombatComponent* BP_GetPawnCombatComponentFromActor( AActor* InActor , EWarriorValidType& OutValidType );
 
+	//创建一个函数去判断是否是敌对对象
+	UFUNCTION( BlueprintPure , Category = "Warrior|FunctionLibrary" )
+	static bool IsTargetPawnHostile(APawn* QueryPawn , APawn* TargetPawn);
+
 };

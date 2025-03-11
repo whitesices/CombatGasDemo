@@ -29,5 +29,9 @@ public:
 	//定义移除管理能力的方法
 	UFUNCTION( BlueprintCallable , Category = "Warrior|Ability" , meta = (ApplyLevel = "1"))
 	void RemoveHeroWEaponAbilities( UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& InSpecHandleToRemove );
+
+	//通过Tag激活GameAbility
+	UFUNCTION( BlueprintCallable , Category="Warrior|Ability")
+	bool TryActivateAbilityByTag(FGameplayTag AbilityTagByActivate);
 	
 };

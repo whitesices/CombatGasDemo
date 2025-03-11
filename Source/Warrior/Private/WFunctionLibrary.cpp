@@ -10,6 +10,8 @@
 #include "Interfaces/PawnCombatInterface.h"
 ////引入Combat头文件
 #include "Components/Combat/PawnCombatComponent.h"
+//引入生成团队ID接口代理头文件
+#include "GenericTeamAgentInterface.h"
 
 UWarriorAbilitySystemComponent* UWFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
 {
@@ -84,5 +86,20 @@ UPawnCombatComponent* UWFunctionLibrary::BP_GetPawnCombatComponentFromActor(AAct
 
 	OutValidType = CombatComponent ? EWarriorValidType::Valid : EWarriorValidType::InValid;
 	return CombatComponent;
+}
+
+bool UWFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn)
+{
+	//检查检索的Pawn与目标的Pawn
+	check( QueryPawn && TargetPawn );
+	IGenericTeamAgentInterface*  QueryTeamAgent = Cast<IGenericTeamAgentInterface>( QueryPawn->GetController() );
+	IGenericTeamAgentInterface* TargetTeamAgent = Cast<IGenericTeamAgentInterface>(TargetPawn->GetController());
+
+	if (QueryTeamAgent && TargetTeamAgent)
+	{
+		return QueryTeamAgent->GetGenericTeamId() != TargetTeamAgent->GetGenericTeamId();
+	}
+
+	return false;
 }
 

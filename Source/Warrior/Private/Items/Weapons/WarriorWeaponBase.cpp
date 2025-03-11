@@ -4,6 +4,7 @@
 #include "Items/Weapons/WarriorWeaponBase.h"
 #include "Components/BoxComponent.h"
 
+#include "WFunctionLibrary.h"
 //引入打印头文件
 #include "WarriorDebugHelper.h"
 
@@ -35,21 +36,33 @@ void AWarriorWeaponBase::OnCollisionBoxBeginOverlap(UPrimitiveComponent* Overlap
 	//检查武器所有者是否有效
 	checkf( WeaponOwingPawn , TEXT("Forgot to assign an instiagtor as the owning pawn for the weapon:%s"),*GetName() );
 
-	//检查发生碰撞的otheractor是否有效
+	//判断是否是目标对象
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		//检查武器所有者是否是友军
-		if (WeaponOwingPawn != HitPawn)
+		if (UWFunctionLibrary::IsTargetPawnHostile(WeaponOwingPawn, HitPawn))
 		{
-			/*Debug::print(GetName() + TEXT(" Begin overlap with ") + HitPawn->GetName() , FColor::Green );*/
-
 			//执行绑定的单播
 			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
 
-		//TODO:Implement Hit check for enemy characters
-
 	}
+	
+
+	//检查发生碰撞的otheractor是否有效
+	//if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	//{
+	//	//检查武器所有者是否是友军
+	//	if (WeaponOwingPawn != HitPawn)
+	//	{
+	//		/*Debug::print(GetName() + TEXT(" Begin overlap with ") + HitPawn->GetName() , FColor::Green );*/
+
+	//		//执行绑定的单播
+	//		OnWeaponHitTarget.ExecuteIfBound(OtherActor);
+	//	}
+
+	//	//TODO:Implement Hit check for enemy characters
+
+	//}
 }
 
 void AWarriorWeaponBase::OnCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -60,18 +73,27 @@ void AWarriorWeaponBase::OnCollisionBoxEndOverlap(UPrimitiveComponent* Overlappe
 	checkf(WeaponOwingPawn, TEXT("Forgot to assign an instigator as the owning pawn for the weapon:%s"), *GetName());
 
 	//检查发生碰撞的otherCharacter是否有效
+	//if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	//{
+	//	//检查武器所有者是否互为友军
+	//	if (WeaponOwingPawn != HitPawn)
+	//	{
+	//		/*Debug::print( GetName() + TEXT(" End overlap with ") + HitPawn->GetName(), FColor::Red);*/
+
+	//		//执行绑定的单播
+	//		OnWeaponPulledFromTarget.ExecuteIfBound(OtherActor);
+	//	}
+
+	//	//TODO:Implement Hit check for enemy characters
+	//}
+
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		//检查武器所有者是否互为友军
-		if (WeaponOwingPawn != HitPawn)
+		if (UWFunctionLibrary::IsTargetPawnHostile(WeaponOwingPawn, HitPawn))
 		{
-			/*Debug::print( GetName() + TEXT(" End overlap with ") + HitPawn->GetName(), FColor::Red);*/
-
-			//执行绑定的单播
+			// 执行绑定的单播
 			OnWeaponPulledFromTarget.ExecuteIfBound(OtherActor);
 		}
-
-		//TODO:Implement Hit check for enemy characters
 	}
 }
 

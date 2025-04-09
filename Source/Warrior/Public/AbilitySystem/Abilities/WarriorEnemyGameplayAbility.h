@@ -28,6 +28,10 @@ public:
 	//获取EnemyCombat
 	UFUNCTION( BlueprintPure , Category="Warrior|Ability")
 	UEnemyCombatComponent* GetEnemyCombatComponentFromActorInfo();
+	
+	//定义SpecHandle
+	UFUNCTION(BlueprintPure , Category="Warrior|Ability")
+	FGameplayEffectSpecHandle MakeEnemyDamageEffectSpecHandle( TSubclassOf<UGameplayEffect> EffectClass , const FScalableFloat& InDamageScalableFloat);
 
 private:
 	//声明临时的EnemyCharacter变量

@@ -17,6 +17,8 @@ class UWarriorAbilitySystemComponent;
 class UWarriorAttributeSet;
 class UAbilitySystemComponent;
 class UDataAsset_StartUpDataBase;
+//前置声明motionwarping
+class UMotionWarpingComponent;
 
 UCLASS()
 class WARRIOR_API AWarriorBaseCharacter : public ACharacter , public IAbilitySystemInterface , public IPawnCombatInterface , public IPawnUIInterface
@@ -50,6 +52,10 @@ protected:
 	//声明创建AttributeSet
 	UPROPERTY(VisibleAnywhere , BlueprintReadOnly , Category = "AttributeSet")
 	UWarriorAttributeSet* WAttributeSet;
+
+	//声明运动扭曲组件
+	UPROPERTY(VisibleAnywhere , BlueprintReadOnly , Category = "MotionWarping")
+	UMotionWarpingComponent* MotionWarpingComponent;
 
 	//声明一个DataAsset
 	UPROPERTY( EditDefaultsOnly , BlueprintReadOnly , Category = "CharacterData")

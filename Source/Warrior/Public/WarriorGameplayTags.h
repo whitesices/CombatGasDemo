@@ -48,6 +48,7 @@ namespace WarriorGameplayTags
 
 		//StrafingTag
 		WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_Strafing)
+		WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_UnderAttack)
 
 		//SharedRags
 		WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN( Shared_Event_MeleeHit )

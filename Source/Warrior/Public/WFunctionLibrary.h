@@ -55,4 +55,10 @@ public:
 	UFUNCTION( BlueprintPure , Category = "Warrior|FunctionLibrary" )
 	static bool IsTargetPawnHostile(APawn* QueryPawn , APawn* TargetPawn);
 
+	//创建一个读取缩放float的函数
+	UFUNCTION( BlueprintPure , Category = "Warrior|FunctionLibrary" , meta = ( CompactNodeTitle = "Get Value At Level") )
+	static float GetScalableFloatValueAtLevel( const FScalableFloat& InScalableFloat , float InLevel = 1.f);
+
+
+
 };

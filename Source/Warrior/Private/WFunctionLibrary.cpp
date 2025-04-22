@@ -12,6 +12,10 @@
 #include "Components/Combat/PawnCombatComponent.h"
 //引入生成团队ID接口代理头文件
 #include "GenericTeamAgentInterface.h"
+//引入数学库函数头文件
+#include "Kismet/KismetMathLibrary.h"
+//引入GameplayTag头文件
+#include "WarriorGameplayTags.h"
 
 UWarriorAbilitySystemComponent* UWFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
 {
@@ -106,5 +110,49 @@ bool UWFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn)
 float UWFunctionLibrary::GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, float InLevel)
 {
 	return InScalableFloat.GetValueAtLevel( InLevel );
+}
+
+FGameplayTag UWFunctionLibrary::ComputeHitReactDirectionTag(AActor* InAttacker, AActor* InVictim, float& OutAngleDifference)
+{
+	//判断攻击者和受攻击者是否有效
+	check( InAttacker && InVictim );
+
+	//朝向
+	const FVector VictimForward = InVictim->GetActorForwardVector();
+	//攻击者朝向的归一化
+	const FVector VictimToAttackerNormalized = ( InAttacker->GetActorLocation() - InVictim->GetActorLocation() ).GetSafeNormal();
+
+	const float DotResult = FVector::DotProduct( VictimForward , VictimToAttackerNormalized );
+
+	//得到弧值
+	OutAngleDifference = UKismetMathLibrary::DegAcos(DotResult);
+	//获取两个向量插积结果
+	const FVector CrossResult = FVector::CrossProduct( VictimForward , VictimToAttackerNormalized );
+
+	//判断角度的正负
+	if (CrossResult.Z < 0.f)
+	{
+		OutAngleDifference *= -1.f;
+	}
+
+	//通过夹角判断返回的Tag标签
+	if (OutAngleDifference >= -45.f && OutAngleDifference <=45.f)
+	{
+		return WarriorGameplayTags::Shared_Status_HitReact_Front;
+	}
+	else if (OutAngleDifference >= -135.f && OutAngleDifference < -45.f)
+	{
+		return WarriorGameplayTags::Shared_Status_HitReact_Left;
+	}
+	else if (OutAngleDifference >45.f && OutAngleDifference <=135.f)
+	{
+		return WarriorGameplayTags::Shared_Status_HitReact_Right;
+	}
+	else if(OutAngleDifference < -135.f || OutAngleDifference > 135.f )
+	{
+		return WarriorGameplayTags::Shared_Status_HitReact_Back;
+	}
+
+	return WarriorGameplayTags::Shared_Status_HitReact_Front;
 }
 

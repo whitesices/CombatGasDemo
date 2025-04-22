@@ -121,7 +121,7 @@ void UWarriorAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 
 		//打印当前值的变化
 		//FString DebugText = FString:;printf(TEXT("About CurentHealthPercent is %f"), (GetCurrentHealth() / GetMaxHealth()));
-		Debug::print( TEXT("About CurentHealthPercent is ") , ( GetCurrentHealth() / GetMaxHealth() ) );
+		//Debug::print( TEXT("About CurentHealthPercent is ") , ( GetCurrentHealth() / GetMaxHealth() ) );
 
 		/************************************ Notify the UI *******************************************/
 

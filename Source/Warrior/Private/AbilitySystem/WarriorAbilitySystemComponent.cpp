@@ -6,6 +6,8 @@
 #include "AbilitySystem/Abilities/WarriorGameplayAbility.h"
 //引入HeroAbilitySystem
 #include "AbilitySystem/Abilities/WarriorHeroGameplayAbility.h"
+//引入GameplayTag的头文件
+#include "WarriorGameplayTags.h"
 
 void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InInputTag)
 {
@@ -25,18 +27,38 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 
 void UWarriorAbilitySystemComponent::OnAbilityInputRelease(const FGameplayTag& InInputTag)
 {
-	//判断InInputTag的有效性
-	if (!InInputTag.IsValid()) return;
+	////判断InInputTag的有效性
+	//if (!InInputTag.IsValid()) return;
 
-	//获取对应的Ability并激活
+	////获取对应的Ability并激活
+	//for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	//{
+	//	//检验技能句柄是否有效
+	//	if (!AbilitySpec.DynamicAbilityTags.HasTagExact(InInputTag)) continue;
+	//	//激活匹配tag的ability
+	//	TryActivateAbility(AbilitySpec.Handle);
+	//}
+
+	//判断InputTag的有效性
+	if (!InInputTag.IsValid() || !InInputTag.MatchesTag( WarriorGameplayTags::InputTag_MustBeHeld ) )
+	{
+		return;
+	}
+
 	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
+		////检验技能句柄是否有效
+		//if (!AbilitySpec.DynamicAbilityTags.HasTagExact(InInputTag)) continue;
+		////激活匹配tag的ability
+		//TryActivateAbility(AbilitySpec.Handle);
 		//检验技能句柄是否有效
-		if (!AbilitySpec.DynamicAbilityTags.HasTagExact(InInputTag)) continue;
-		//激活匹配tag的ability
-		TryActivateAbility(AbilitySpec.Handle);
+		if ( AbilitySpec.DynamicAbilityTags.HasTagExact(InInputTag) && AbilitySpec.IsActive() )
+		{
+			//取消匹配tag 的ability
+			//TryActivateAbility( AbilitySpec.Handle);
+			CancelAbilityHandle( AbilitySpec.Handle );
+		}
 	}
-	
 }
 
 void UWarriorAbilitySystemComponent::GrantHeroWEaponAbilities(const TArray<FWarriorHeroAbilitySet>& InDefaultWeaponAbilities, int32 ApplyLevel , TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles)

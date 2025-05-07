@@ -16,6 +16,7 @@
 #include "Kismet/KismetMathLibrary.h"
 //引入GameplayTag头文件
 #include "WarriorGameplayTags.h"
+#include "WarriorDebugHelper.h"
 
 UWarriorAbilitySystemComponent* UWFunctionLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
 {
@@ -154,5 +155,17 @@ FGameplayTag UWFunctionLibrary::ComputeHitReactDirectionTag(AActor* InAttacker, 
 	}
 
 	return WarriorGameplayTags::Shared_Status_HitReact_Front;
+}
+
+bool UWFunctionLibrary::IsValidBlock(AActor* InAttacker, AActor* InDefender)
+{
+	check(InAttacker && InDefender);
+	const float DotResult = FVector::DotProduct( InAttacker->GetActorForwardVector() , InDefender->GetActorForwardVector() );
+
+	//const FString DebugString = FString::Printf( TEXT("Dot Result: %f %s "),DotResult , DotResult < -0.1f ? TEXT("Valid Block") : TEXT("Not Valid"));
+	////打印调试信息
+	//Debug::print( DebugString , DotResult < -0.1f ? FColor::Green : FColor::Red );
+	//返回bool值
+	return DotResult<-0.1f;
 }
 

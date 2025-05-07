@@ -34,6 +34,8 @@ namespace WarriorGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Equip_Axe,"Player.Event.Equip.Axe")
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_UnEquip_Axe, "Player.Event.UnEquip.Axe")
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_HitPause, "Player.Event.HitPause")
+
+	UE_DEFINE_GAMEPLAY_TAG(Player_Event_SuccessfullBlock,"Player.Event.SuccessfullBlock")
 		////Attack
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Attack_Light_Axe, "Player.Event.Attack.Light.Axe")
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Attack_Heavy_Axe, "Player.Event.Attack.Heavy.Axe")

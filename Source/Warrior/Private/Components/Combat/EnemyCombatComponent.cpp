@@ -6,6 +6,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 //引入管理gameplayTag的头文件
 #include "WarriorGameplayTags.h"
+//引入通用蓝图函数库
+#include "WFunctionLibrary.h"
 
 void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
@@ -25,12 +27,13 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 
 	//定义临时变量 检查碰撞
 	bool bIsValidBlock = false;
-	const bool bIsPlayerBlocking = false;
+	const bool bIsPlayerBlocking = UWFunctionLibrary::NativeDoesActorHaveTag( HitActor ,WarriorGameplayTags::Player_Status_Blocking );
 	const bool bIsMyAttackUnblockable = false;
 
 	if (bIsPlayerBlocking && !bIsMyAttackUnblockable)
 	{
 		//检查碰撞是否有效
+		bIsValidBlock = UWFunctionLibrary::IsValidBlock( GetOwningPawn() , HitActor );
 	}
 
 	//声明游戏事件数据的临时变量
@@ -41,7 +44,12 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 	//判断碰撞是否有效
 	if( bIsValidBlock)
 	{
-		//处理成功的碰撞
+		//处理成功的技能阻挡
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			HitActor,
+			WarriorGameplayTags::Player_Event_SuccessfullBlock,
+			EventData
+		);
 	}
 	else
 	{

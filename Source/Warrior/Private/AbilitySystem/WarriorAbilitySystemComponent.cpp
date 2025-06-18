@@ -20,6 +20,27 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 		//检验技能句柄是否有效以及Tag是否匹配
 		if (!AbilitySpec.DynamicAbilityTags.HasTagExact(InInputTag)) continue;
 
+		//判断输入的InputTag是否匹配相应的GameplayTag
+		if ( InInputTag.MatchesTag( WarriorGameplayTags::InputTag_Toggleable ) )
+		{
+			//判断相应的SpecHandle是否被激活
+			if ( AbilitySpec.IsActive() )
+			{
+				//取消相应的技能
+				CancelAbilityHandle(AbilitySpec.Handle);
+			}
+			else
+			{
+				//激活相应的技能句柄
+				TryActivateAbility(AbilitySpec.Handle);
+			}
+		}
+		else
+		{
+			TryActivateAbility(AbilitySpec.Handle);
+		}
+
+		//激活相应的技能
 		TryActivateAbility(AbilitySpec.Handle);
 
 	}

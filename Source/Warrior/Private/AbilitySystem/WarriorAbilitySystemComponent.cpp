@@ -40,8 +40,8 @@ void UWarriorAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& I
 			TryActivateAbility(AbilitySpec.Handle);
 		}
 
-		//激活相应的技能
-		TryActivateAbility(AbilitySpec.Handle);
+		////激活相应的技能
+		//TryActivateAbility(AbilitySpec.Handle);
 
 	}
 }

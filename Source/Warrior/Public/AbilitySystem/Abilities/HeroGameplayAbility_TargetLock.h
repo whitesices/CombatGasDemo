@@ -25,6 +25,10 @@ protected:
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	//~End UGameplayAbility Interface
 
+	//自定义一个给蓝图调用的Update函数
+	UFUNCTION(BlueprintCallable,Category="TargetToLock")
+	void OnTargetLockTick(float DeltaTime);
+
 private:
 	//定义一个内部调用的锁定目标方法
 	void TryLockOnTarget();
@@ -37,6 +41,12 @@ private:
 	void DrawTargetLockWidget();
 	//设置锁定UI的位置
 	void SetTargetLockWidgetLocation();
+
+	//初始化锁定的移动速度
+	void InitTargetLockMovement();
+	//重置锁定速度
+	void ResetTargetLockMovement();
+
 	//定义取消目标技能的函数方法
 	void CancelTargetLockAbility();
 	//定义清除函数方法
@@ -58,6 +68,13 @@ private:
 	UPROPERTY(EditDefaultsOnly,Category="Target Lock")
 	TSubclassOf<UWarriorWidgetBase> TargetLockUIClass;
 
+	//声明插值速度
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	float TargetLockRotationInterpSpeed = 5.f;
+	//声明可以设置移动速度的变量
+	UPROPERTY(EditDefaultsOnly,Category = "Target Lock")
+	float TargetLockMaxWalkSpeed = 150.f;
+
 	//声明可以锁定的有效对象
 	UPROPERTY()
 	TArray<AActor*> AvailableActorsToLock;
@@ -72,4 +89,7 @@ private:
 	//定义TargetUI的Size
 	UPROPERTY()
 	FVector2D TargetLockWidgetSize = FVector2D::ZeroVector;
+	//创建一个变量缓存最大移动速度
+	UPROPERTY()
+	float CacehdDefaultMaxWalkSpeed = 0.f;
 };

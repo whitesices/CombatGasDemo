@@ -6,6 +6,9 @@
 #include "AbilitySystem/Abilities/WarriorHeroGameplayAbility.h"
 #include "HeroGameplayAbility_TargetLock.generated.h"
 
+//引入自定义的UI类
+class UWarriorWidgetBase;
+
 /**
  * 
  */
@@ -27,6 +30,17 @@ private:
 	void TryLockOnTarget();
 	//定义一个获取有效对象去锁定的方法
 	void GetAvailableActorsToLock();
+	//从有效对象获取
+	AActor* GetNearestTargetFromAvailableActors( const TArray<AActor*>& InAvailableActors );
+
+	//绘制目标锁定UI
+	void DrawTargetLockWidget();
+	//设置锁定UI的位置
+	void SetTargetLockWidgetLocation();
+	//定义取消目标技能的函数方法
+	void CancelTargetLockAbility();
+	//定义清除函数方法
+	void CleanUp();
 
 	UPROPERTY(EditDefaultsOnly , Category="Target Lock")
 	float BoxTraceDistance = 5000.f;
@@ -39,4 +53,23 @@ private:
 
 	UPROPERTY(EditDefaultsOnly,Category="Target Lock")
 	bool bShowPersistentDebugShape = false;
+
+	//添加UI绑定
+	UPROPERTY(EditDefaultsOnly,Category="Target Lock")
+	TSubclassOf<UWarriorWidgetBase> TargetLockUIClass;
+
+	//声明可以锁定的有效对象
+	UPROPERTY()
+	TArray<AActor*> AvailableActorsToLock;
+
+	//声明当前锁定对象
+	UPROPERTY()
+	AActor* CurrentLockedActor;
+	//声明绘制的UI变量
+	UPROPERTY()
+	UWarriorWidgetBase* DrawnTargetLockWidget;
+
+	//定义TargetUI的Size
+	UPROPERTY()
+	FVector2D TargetLockWidgetSize = FVector2D::ZeroVector;
 };

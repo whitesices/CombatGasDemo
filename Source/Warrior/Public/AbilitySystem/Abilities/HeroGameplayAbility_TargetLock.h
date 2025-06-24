@@ -89,7 +89,9 @@ private:
 	//声明可以更换InputMappingContext的变量
 	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
 	UInputMappingContext* TargetLockMappingContext;
-
+	//声明创建相机偏移
+	UPROPERTY( EditDefaultsOnly , Category = "Target Lock")
+	float TargetLockCameraOffsetDistance = 20.f;
 
 	//声明可以锁定的有效对象
 	UPROPERTY()

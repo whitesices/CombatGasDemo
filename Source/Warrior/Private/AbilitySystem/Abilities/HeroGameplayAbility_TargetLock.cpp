@@ -74,8 +74,11 @@ void UHeroGameplayAbility_TargetLock::OnTargetLockTick(float DeltaTime)
 
 	if (bShouldOverrideRotation)
 	{
-		const FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(GetHeroCharacterFromActorInfo()->GetActorLocation()
+		/*const FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(GetHeroCharacterFromActorInfo()->GetActorLocation()
+			, CurrentLockedActor->GetActorLocation());*/
+		FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(GetHeroCharacterFromActorInfo()->GetActorLocation()
 			, CurrentLockedActor->GetActorLocation());
+		LookAtRot -=FRotator(TargetLockCameraOffsetDistance,0.f ,0.f) ;//设置新的相机旋转变量
 		//更新player的旋转
 		const FRotator CurrentControlRot = GetHeroControllerFromActorInfo()->GetControlRotation();
 		const FRotator TargetRot = FMath::RInterpTo(CurrentControlRot , LookAtRot , DeltaTime , TargetLockRotationInterpSpeed);

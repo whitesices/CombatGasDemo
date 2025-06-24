@@ -28,6 +28,8 @@
 #include "Kismet/KismetMathLibrary.h"
 //引入移动组件头文件
 #include "GameFramework/CharacterMovementComponent.h"
+//引入增强输入子系统
+#include "EnhancedInputSubsystems.h"
 
 //引入DebugHelper头文件
 #include "WarriorDebugHelper.h"
@@ -38,12 +40,14 @@ void UHeroGameplayAbility_TargetLock::ActivateAbility(const FGameplayAbilitySpec
 	//在回调父类方法之前执行锁定目标方法
 	TryLockOnTarget();
 	InitTargetLockMovement();
+	InitTargetLockMappingContext();
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo , TriggerEventData);
 }
 
 void UHeroGameplayAbility_TargetLock::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	ResetTargetLockMovement();
+	ResetTargetLockMappingContext();
 	//清除函数调用
 	CleanUp();
 	
@@ -78,6 +82,43 @@ void UHeroGameplayAbility_TargetLock::OnTargetLockTick(float DeltaTime)
 		//GetHeroCharacterFromActorInfo()->SetActorRotation(LookAtRot);
 		GetHeroControllerFromActorInfo()->SetControlRotation( FRotator(TargetRot.Pitch , TargetRot.Yaw , 0.f));
 		GetHeroCharacterFromActorInfo()->SetActorRotation( FRotator(0.f, TargetRot.Yaw, 0.f) );
+	}
+}
+
+void UHeroGameplayAbility_TargetLock::SwitchTarget(const FGameplayTag& InSwitchDirectionTag)
+{
+	//获取有效的对象
+	GetAvailableActorsToLock();
+
+	//声明定义朝左朝右的对象数组
+	TArray<AActor*> ActorsOnLeft;
+	TArray<AActor*> ActorOnRight;
+
+	//声明新的锁定目标对象
+	AActor* NewTargetToLock = nullptr;
+	//获取周围目标
+	GetAvailableActorsAroundTarget( ActorsOnLeft, ActorOnRight );
+	//判断激活的gamplayTag
+	if ( InSwitchDirectionTag == WarriorGameplayTags::Player_Event_SwitchTarget_Left)
+	{
+		//获取最近目标对象
+		NewTargetToLock = GetNearestTargetFromAvailableActors(ActorsOnLeft);
+	}
+	else if (InSwitchDirectionTag == WarriorGameplayTags::Player_Event_SwitchTarget_Right)
+	{
+		//获取最近的目标对象
+		NewTargetToLock = GetNearestTargetFromAvailableActors(ActorOnRight);
+	}
+
+	//检查NewTargetToLock的有效性
+	if (!NewTargetToLock)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NewTargetToLock Is null "));
+		return;
+	}
+	else
+	{
+		CurrentLockedActor = NewTargetToLock;
 	}
 }
 
@@ -172,6 +213,46 @@ AActor* UHeroGameplayAbility_TargetLock::GetNearestTargetFromAvailableActors(con
 	return UGameplayStatics::FindNearestActor( GetHeroCharacterFromActorInfo()->GetActorLocation() , InAvailableActors , ClosestDistance );
 }
 
+void UHeroGameplayAbility_TargetLock::GetAvailableActorsAroundTarget(TArray<AActor*>& OutActorsOnLeft, TArray<AActor*>& OutActorsOnRight)
+{
+	//判断当前获取的目标对象是否有效，以及锁定的有效对象是否为空
+	if ( !CurrentLockedActor || AvailableActorsToLock.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("Is Null"));
+		CancelTargetLockAbility();
+		return;
+	}
+
+	//获取玩家位置
+	const FVector PlayerLocation = GetHeroCharacterFromActorInfo()->GetActorLocation();
+	//获取玩家与当前目标的方向
+	const FVector PlayerToCurrentNormalized = (CurrentLockedActor->GetActorLocation() - PlayerLocation).GetSafeNormal();
+	//遍历有效的对象
+	for ( AActor* AvailableActor : AvailableActorsToLock )
+	{
+		//判断寻找到的对象是否有效
+		if (!AvailableActor || AvailableActor == CurrentLockedActor)
+		{
+			continue;
+		}
+
+		const FVector PlayerToAvailableNormalized = (AvailableActor->GetActorLocation() - PlayerLocation).GetSafeNormal();
+
+		//叉乘获得朝向
+		const FVector CrossResult = FVector::CrossProduct( PlayerToCurrentNormalized, PlayerToAvailableNormalized );
+
+		//通过叉乘结果判断左右
+		if (CrossResult.Z > 0.f)
+		{
+			OutActorsOnRight.AddUnique( AvailableActor );
+		}
+		else
+		{
+			OutActorsOnLeft.AddUnique( AvailableActor );
+		}
+	}
+}
+
 void UHeroGameplayAbility_TargetLock::DrawTargetLockWidget()
 {
 	//UI赋值为空才创建
@@ -236,13 +317,51 @@ void UHeroGameplayAbility_TargetLock::InitTargetLockMovement()
 	GetHeroCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed = TargetLockMaxWalkSpeed;
 }
 
+void UHeroGameplayAbility_TargetLock::InitTargetLockMappingContext()
+{
+	//创建本地玩家变量
+	const ULocalPlayer* LocalPlayer = GetHeroControllerFromActorInfo()->GetLocalPlayer();
+	//声明增强输入子系统
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+	//检查子系统是否有效
+	if (!Subsystem)
+	{
+		return;
+	}
+
+	Subsystem->AddMappingContext( TargetLockMappingContext , 3 );
+}
+
 void UHeroGameplayAbility_TargetLock::ResetTargetLockMovement()
 {
 	if (CacehdDefaultMaxWalkSpeed > 0.f)
 	{
+		//重置移动速度
 		GetHeroCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed = CacehdDefaultMaxWalkSpeed;
 	}
 	
+}
+
+void UHeroGameplayAbility_TargetLock::ResetTargetLockMappingContext()
+{
+	//判断玩家控制是否有效
+	if ( !GetHeroControllerFromActorInfo() )
+	{
+		UE_LOG( LogTemp , Warning , TEXT("PlayerController is null"));//打印相应日志
+		return;
+	}
+
+	//创建本地玩家变量
+	const ULocalPlayer* LocalPlayer = GetHeroControllerFromActorInfo()->GetLocalPlayer();
+	//声明增强输入子系统
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+	//检查子系统是否有效
+	if (!Subsystem)
+	{
+		return;
+	}
+
+	Subsystem->RemoveMappingContext(TargetLockMappingContext);
 }
 
 void UHeroGameplayAbility_TargetLock::CancelTargetLockAbility()

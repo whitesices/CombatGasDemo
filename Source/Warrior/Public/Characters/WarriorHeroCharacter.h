@@ -78,6 +78,13 @@ private:
 
 	void W_Look(const FInputActionValue& InputActionValue);
 
+	//定义鼠标选择目标按键事件
+	void Input_SwitchTargetTriggered( const FInputActionValue& InputActionValue);
+	void Input_SwitchTargetCompleted( const FInputActionValue& InputActionValue);
+
+	//声明定义选择方向向量
+	FVector2D SwitchDirection = FVector2D::ZeroVector;
+
 	//定义装备武器技能按下的方法
 	void Input_AbilityInputPressed(FGameplayTag InInputTag);
 	//定义装备武器技能释放的方法

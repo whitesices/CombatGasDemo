@@ -25,9 +25,10 @@
 #include "Components/Combat/HeroCombatComponent.h"
 //引入GameplayTagContainer的头文件
 #include "GameplayTagContainer.h"
-
 //引入UIComponent组件
 #include "Components/UI/HeroUIComponent.h"
+//引入技能系统蓝图头文件
+#include "AbilitySystemBlueprintLibrary.h"
 
 #include "InputActionValue.h"
 
@@ -142,9 +143,13 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	UWarriorInputComponent* WInputComponent = CastChecked<UWarriorInputComponent>(PlayerInputComponent);
 	WInputComponent->BindNativeInputAction(InputConfigDataAsset,WarriorGameplayTags::InputTag_Move,ETriggerEvent::Triggered,this, &AWarriorHeroCharacter::W_Move);
 	WInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &AWarriorHeroCharacter::W_Look);
+	//设置选择目标方法
+	WInputComponent->BindNativeInputAction( InputConfigDataAsset , WarriorGameplayTags::InputTag_SwitchTarget , ETriggerEvent::Triggered , this , &AWarriorHeroCharacter::Input_SwitchTargetTriggered);
+	WInputComponent->BindNativeInputAction( InputConfigDataAsset , WarriorGameplayTags::InputTag_SwitchTarget,ETriggerEvent::Completed , this , &AWarriorHeroCharacter::Input_SwitchTargetCompleted);
 	//设置装备技能的方法
 	WInputComponent->BindAbilityInputAction(InputConfigDataAsset,this , &AWarriorHeroCharacter::Input_AbilityInputPressed , &AWarriorHeroCharacter::Input_AbilityInputRelease);
 
+	
 }
 
 void AWarriorHeroCharacter::W_Move(const FInputActionValue& InputActionValue)
@@ -178,6 +183,25 @@ void AWarriorHeroCharacter::W_Look(const FInputActionValue& InputActionValue)
 	{
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AWarriorHeroCharacter::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
+{
+	SwitchDirection = InputActionValue.Get<FVector2D>();
+}
+
+void AWarriorHeroCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue)
+{
+	//创建游戏数据
+	FGameplayEventData Data;
+	//发送游戏事件
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this, SwitchDirection.X > 0.f ? WarriorGameplayTags::Player_Event_SwitchTarget_Right : WarriorGameplayTags::Player_Event_SwitchTarget_Left,
+		Data
+	);
+
+	//打印调试信息
+	/*Debug::print(TEXT("SwitchDirection:") + SwitchDirection.ToString());*/
 }
 
 void AWarriorHeroCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)

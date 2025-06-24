@@ -8,6 +8,7 @@
 
 //引入自定义的UI类
 class UWarriorWidgetBase;
+class UInputMappingContext;
 
 /**
  * 
@@ -29,6 +30,10 @@ protected:
 	UFUNCTION(BlueprintCallable,Category="TargetToLock")
 	void OnTargetLockTick(float DeltaTime);
 
+	//自定义声明创建供给蓝图使用的目标选择函数
+	UFUNCTION(BlueprintCallable,Category="TargetToLock")
+	void SwitchTarget( const FGameplayTag& InSwitchDirectionTag);
+
 private:
 	//定义一个内部调用的锁定目标方法
 	void TryLockOnTarget();
@@ -37,6 +42,9 @@ private:
 	//从有效对象获取
 	AActor* GetNearestTargetFromAvailableActors( const TArray<AActor*>& InAvailableActors );
 
+	//从有效的对象中获取周围的目标
+	void GetAvailableActorsAroundTarget( TArray<AActor*>& OutActorsOnLeft , TArray<AActor*>& OutActorsOnRight );
+
 	//绘制目标锁定UI
 	void DrawTargetLockWidget();
 	//设置锁定UI的位置
@@ -44,8 +52,12 @@ private:
 
 	//初始化锁定的移动速度
 	void InitTargetLockMovement();
+	//初始化键盘上下文
+	void InitTargetLockMappingContext();
 	//重置锁定速度
 	void ResetTargetLockMovement();
+	//重置键盘上下文
+	void ResetTargetLockMappingContext();
 
 	//定义取消目标技能的函数方法
 	void CancelTargetLockAbility();
@@ -74,6 +86,10 @@ private:
 	//声明可以设置移动速度的变量
 	UPROPERTY(EditDefaultsOnly,Category = "Target Lock")
 	float TargetLockMaxWalkSpeed = 150.f;
+	//声明可以更换InputMappingContext的变量
+	UPROPERTY(EditDefaultsOnly, Category = "Target Lock")
+	UInputMappingContext* TargetLockMappingContext;
+
 
 	//声明可以锁定的有效对象
 	UPROPERTY()

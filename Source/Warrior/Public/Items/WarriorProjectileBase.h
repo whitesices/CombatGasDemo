@@ -13,6 +13,7 @@ class UBoxComponent;
 class UNiagaraComponent;
 class UProjectileMovementComponent;
 //struct FGameplayEffectSpecHandle;
+struct FGameplayEventData;
 
 //声明一个枚举类型来区别伤害类型
 UENUM( BlueprintType )
@@ -62,5 +63,5 @@ protected:
 
 private:
 	//建立一个私有函数处理引用GameplayEffect的数据处理
-	void HandleApplyProjectileDamage(APawn* InHitPawn);
+	void HandleApplyProjectileDamage( APawn* InHitPawn , const FGameplayEventData& InPlayload );
 };

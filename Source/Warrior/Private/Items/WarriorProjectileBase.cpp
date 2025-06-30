@@ -92,7 +92,7 @@ void AWarriorProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponent, 
 	else
 	{
 		//Apply projectile damage
-
+		HandleApplyProjectileDamage( HitPawn , Data );
 	}
 
 	//最终销毁
@@ -101,6 +101,22 @@ void AWarriorProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponent, 
 
 void AWarriorProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+}
+
+void AWarriorProjectileBase::HandleApplyProjectileDamage( APawn* InHitPawn, const FGameplayEventData& InPlayload )
+{
+	checkf( ProjectileDamageEffectSpecHandle.IsValid() , TEXT("Forgot to assign a valid spec handle to the projectile:%s"),*GetActorNameOrLabel() );
+	//获取是否成功应用的变量
+	const bool bWasApplied = UWFunctionLibrary::ApplyGameplayEffectSpecHandleToTarget( GetInstigator() , InHitPawn , ProjectileDamageEffectSpecHandle );
+
+	if (bWasApplied)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			InHitPawn,
+			WarriorGameplayTags::Shared_Event_HitReact,
+			InPlayload
+		);
+	}
 }
 
 

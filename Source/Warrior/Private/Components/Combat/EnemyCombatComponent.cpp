@@ -28,7 +28,8 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 	//定义临时变量 检查碰撞
 	bool bIsValidBlock = false;
 	const bool bIsPlayerBlocking = UWFunctionLibrary::NativeDoesActorHaveTag( HitActor ,WarriorGameplayTags::Player_Status_Blocking );
-	const bool bIsMyAttackUnblockable = false;
+	/*const bool bIsMyAttackUnblockable = false;*/
+	const bool bIsMyAttackUnblockable = UWFunctionLibrary::NativeDoesActorHaveTag( GetOwningPawn() , WarriorGameplayTags::Enemy_Status_Unbloackable );
 
 	if (bIsPlayerBlocking && !bIsMyAttackUnblockable)
 	{

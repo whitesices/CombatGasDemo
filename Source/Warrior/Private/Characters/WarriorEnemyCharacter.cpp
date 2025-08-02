@@ -15,6 +15,8 @@
 #include "Components/WidgetComponent.h"
 //引入自定义的WidgetBase头文件
 #include "Widgets/WarriorWidgetBase.h"
+//引入碰撞体组件头文件
+#include "Components/BoxComponent.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -49,6 +51,17 @@ AWarriorEnemyCharacter::AWarriorEnemyCharacter()
 	EnemyHealthUIComponent = CreateDefaultSubobject<UWidgetComponent>( TEXT("EnemyHealthWidgetComponent") );
 	//将健康组件添加的Mesh上
 	EnemyHealthUIComponent->SetupAttachment( GetMesh() );
+
+	//初始化左右手碰撞
+	LeftHandCollisionBox = CreateDefaultSubobject<UBoxComponent>("LeftHandCollisionBox");
+	LeftHandCollisionBox->SetupAttachment( GetMesh() );
+	LeftHandCollisionBox->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+	LeftHandCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this , &AWarriorEnemyCharacter::OnBodyCollisionBoxBeginOverlap);
+
+	RightHandCollsionBox = CreateDefaultSubobject<UBoxComponent>("RightHandCollisionBox");
+	RightHandCollsionBox->SetupAttachment( GetMesh() );
+	RightHandCollsionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RightHandCollsionBox->OnComponentBeginOverlap.AddUniqueDynamic(this, &AWarriorEnemyCharacter::OnBodyCollisionBoxBeginOverlap);
 }
 
 UPawnCombatComponent* AWarriorEnemyCharacter::GetPawnCombatComponent() const
@@ -86,6 +99,10 @@ void AWarriorEnemyCharacter::PossessedBy(AController* NewController)
 	
 
 	InitEnemyStartUpData();
+}
+
+void AWarriorEnemyCharacter::OnBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherCompIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
 }
 
 void AWarriorEnemyCharacter::InitEnemyStartUpData()

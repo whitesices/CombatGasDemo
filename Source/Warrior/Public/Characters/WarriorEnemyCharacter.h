@@ -12,6 +12,8 @@ class UEnemyCombatComponent;
 class UEnemyUIComponent;
 //引入widgetComponent组件
 class UWidgetComponent;
+//前置声明碰撞组件
+class UBoxComponent;
 
 /**
  * 
@@ -54,6 +56,12 @@ private:
 	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "Combat" , meta = (AllowPrivateAccess="true") )
 	UEnemyCombatComponent* EnemyCombatComponent;
 
+	//声明左右手碰撞体
+	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* LeftHandCollisionBox;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* RightHandCollsionBox;
+
 	//声明敌人UI组件
 	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "UI" , meta = ( AllowPrivateAccess="true") )
 	UEnemyUIComponent* EnemyUIComonent;
@@ -61,6 +69,10 @@ private:
 	//声明敌人Widget组件
 	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "UI" , meta = (AllowPrivateAccess="true") )
 	UWidgetComponent* EnemyHealthUIComponent;
+
+	//定义可供蓝图调用的检查是否发生碰撞
+	UFUNCTION()
+	virtual void OnBodyCollisionBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherCompIndex , bool bFromSweep , const FHitResult& SweepResult);
 #pragma endregion
 
 public:
@@ -74,6 +86,17 @@ public:
 	FORCEINLINE UEnemyUIComponent* GetEnemyUIComponent() const
 	{
 		return EnemyUIComonent;
+	}
+
+	//获取左手碰撞
+	FORCEINLINE UBoxComponent* GetLeftHandCollisionBox() const
+	{
+		return LeftHandCollisionBox;
+	}
+	//获取右手碰撞
+	FORCEINLINE UBoxComponent* GetRightHandCollisionBox() const
+	{
+		return RightHandCollsionBox;
 	}
 	
 private:

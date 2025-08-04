@@ -22,7 +22,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Warrior|AbilityTask", meta = (DisplayName = "Wait Gameplay Event And Spawn Enemies", HidePin = "OwningAbility",DefaultToSelf="OwningAbility"
 		,BlueprintInternalUseOnly = "true" , NumToSpawn = "1" , RandomSpawnRadius = "200"))
 	static UAbilityTask_WaitSpawnEnemies* WaitSpawnEnemies( UGameplayAbility* OwningAbility, FGameplayTag EventTag, TSoftClassPtr<AWarriorEnemyCharacter> SoftEnemyClassToSpawn , 
-		int32 NumToSpawn , const FVector& SpawnOrigin , float RandomSpawnRadius , const FRotator& SpawnRotation);
+		int32 NumToSpawn , const FVector& SpawnOrigin , float RandomSpawnRadius /*, const FRotator& SpawnRotation*/);
 
 	//创建委托变量
 	UPROPERTY(BlueprintAssignable)
@@ -47,10 +47,12 @@ private:
 	//缓存生成随机半径
 	float CachedRandomSpawnRadius;
 	//缓存生成时旋转量
-	FRotator CachedSpawnRotation;
+	/*FRotator CachedSpawnRotation;*/
 
 	FDelegateHandle DelegateHandle;
 
 	//定义游戏事件接受函数
 	void OnGameplayEventReceived( const FGameplayEventData* InPayload );
+	//定义敌人加载的函数方法
+	void OnEnemyClassLoaded();
 };

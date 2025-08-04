@@ -64,7 +64,47 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDama
 	//检查触发的武器碰撞类型
 	if (ToggleDamageType == EToggleDamageType::CurrentEquippedWeapon )
 	{
-		//创建一个武器类局部变量来存储获得武器类
+		////创建一个武器类局部变量来存储获得武器类
+		//AWarriorWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
+		////检查WeaponToToggle是否有效
+		//check( WeaponToToggle );
+
+		////是否启用碰撞
+		//if (bShouldEnable)
+		//{
+		//	WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		//	/*Debug::print( WeaponToToggle->GetName() + TEXT(" collision Enabled ") , FColor::Green );*/
+		//}
+		//else
+		//{
+		//	WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		//	/*Debug::print(WeaponToToggle->GetName() + TEXT(" collision Disabled "), FColor::Red);*/
+
+		//	//指控OverlappedActors
+		//	OverlappedActors.Empty();
+		//}
+		ToggleCurrentEquippedWeaponCollision(bShouldEnable);
+		
+	}
+	else
+	{
+		ToggleBodyCollisionBoxCollision(bShouldEnable,ToggleDamageType);
+	}
+
+	//TODO: Handle body collision boxes
+}
+
+void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
+{
+}
+
+void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
+{
+}
+
+void UPawnCombatComponent::ToggleCurrentEquippedWeaponCollision(bool bShouldEnable)
+{
+	//创建一个武器类局部变量来存储获得武器类
 		AWarriorWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
 		//检查WeaponToToggle是否有效
 		check( WeaponToToggle );
@@ -83,16 +123,8 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDama
 			//指控OverlappedActors
 			OverlappedActors.Empty();
 		}
-		
-	}
-
-	//TODO: Handle body collision boxes
 }
 
-void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
-{
-}
-
-void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
+void UPawnCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldEnbale, EToggleDamageType ToggleDamageType)
 {
 }

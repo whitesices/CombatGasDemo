@@ -17,6 +17,8 @@
 #include "Widgets/WarriorWidgetBase.h"
 //引入碰撞体组件头文件
 #include "Components/BoxComponent.h"
+//引入蓝图函数库
+#include "WFunctionLibrary.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -101,8 +103,34 @@ void AWarriorEnemyCharacter::PossessedBy(AController* NewController)
 	InitEnemyStartUpData();
 }
 
+#if WITH_EDITOR
+void AWarriorEnemyCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	//判断获取的骨骼名称是否存在
+	if ( PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass,LeftHandCollisionBoxAttachBoneName) )
+	{
+		LeftHandCollisionBox->AttachToComponent( GetMesh() , FAttachmentTransformRules::SnapToTargetIncludingScale , LeftHandCollisionBoxAttachBoneName );//将碰撞体添加到骨骼上
+	}
+
+	if ( PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass,RightHandCollisionBoxAttachBoneName) )
+	{
+		RightHandCollsionBox->AttachToComponent( GetMesh() , FAttachmentTransformRules::SnapToTargetIncludingScale, RightHandCollisionBoxAttachBoneName );
+	}
+}
+#endif
+
 void AWarriorEnemyCharacter::OnBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherCompIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	//判断是否获取到Pawn
+	if (APawn* HitPawn = Cast<APawn>(OtherActor) )
+	{
+		if (UWFunctionLibrary::IsTargetPawnHostile(this , HitPawn) )
+		{
+			EnemyCombatComponent->OnHitTargetActor(HitPawn);
+		}
+	}
 }
 
 void AWarriorEnemyCharacter::InitEnemyStartUpData()

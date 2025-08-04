@@ -17,6 +17,8 @@ class WARRIOR_API UEnemyCombatComponent : public UPawnCombatComponent
 public:
 	//重写相应函数
 	virtual void OnHitTargetActor(AActor* HitActor) override;
+	//重写BodyCollision
+	virtual void ToggleBodyCollisionBoxCollision(bool bShouldEnbale, EToggleDamageType ToggleDamageType) override;
 
 	
 };

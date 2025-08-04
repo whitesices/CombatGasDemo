@@ -50,6 +50,11 @@ public:
 	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
 
 protected:
+	//声明可复写的虚函数
+	virtual void ToggleCurrentEquippedWeaponCollision(bool bShouldEnable);
+	virtual void ToggleBodyCollisionBoxCollision( bool bShouldEnbale , EToggleDamageType ToggleDamageType );
+
+protected:
 
 	//声明一个数组来存储发生碰撞的Actor
 	TArray<AActor*> OverlappedActors;

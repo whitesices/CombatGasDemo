@@ -8,6 +8,9 @@
 #include "WarriorGameplayTags.h"
 //引入通用蓝图函数库
 #include "WFunctionLibrary.h"
+//引入自定义的敌人头文件
+#include "Characters/WarriorEnemyCharacter.h"
+#include "Components/BoxComponent.h"
 
 void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
@@ -62,4 +65,34 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 		);
 	}
 
+}
+
+void UEnemyCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldEnbale, EToggleDamageType ToggleDamageType)
+{
+	AWarriorEnemyCharacter* OwningEnemyCharacter = GetOwningPawn<AWarriorEnemyCharacter>();//获取所属的Pawn
+	check(OwningEnemyCharacter);//判断有效性
+	UBoxComponent* LeftHandCollisionBox = OwningEnemyCharacter->GetLeftHandCollisionBox();
+	UBoxComponent* RightHandCollisionBox = OwningEnemyCharacter->GetRightHandCollisionBox();
+
+	//检查碰撞体的有效性
+	check(LeftHandCollisionBox && RightHandCollisionBox);
+
+	switch (ToggleDamageType)
+	{
+	case EToggleDamageType::LeftHand:
+		LeftHandCollisionBox->SetCollisionEnabled( bShouldEnbale ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+		break;
+	case EToggleDamageType::RightHand:
+		RightHandCollisionBox->SetCollisionEnabled(bShouldEnbale ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+		break;
+	default:
+		break;
+
+	}
+
+	//判断shouldenable
+	if (!bShouldEnbale)
+	{
+		OverlappedActors.Empty();
+	}
 }

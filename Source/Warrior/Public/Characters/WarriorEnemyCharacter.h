@@ -47,7 +47,12 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	//~End APawn Inetrface
 
-	
+#if WITH_EDITOR
+	//重写加载完成引擎后改变属性
+	//~Begin UObject Interface.
+	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
+	//~End UObject Interface
+#endif
 
 private:
 #pragma region Componenets
@@ -61,6 +66,12 @@ private:
 	UBoxComponent* LeftHandCollisionBox;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* RightHandCollsionBox;
+
+	//声明左右手骨骼名
+	UPROPERTY(EditDefaultsOnly , BlueprintReadWrite, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	FName LeftHandCollisionBoxAttachBoneName;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	FName RightHandCollisionBoxAttachBoneName;
 
 	//声明敌人UI组件
 	UPROPERTY( VisibleAnywhere , BlueprintReadOnly , Category = "UI" , meta = ( AllowPrivateAccess="true") )
